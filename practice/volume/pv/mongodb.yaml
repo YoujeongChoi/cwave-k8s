@@ -5,27 +5,20 @@ metadata:
   labels:
     name: mongodb
 spec:
-  # A zone에만 뜨게 (강제조항)
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-          - matchExpressions:
-            - key: topology.ebs.csi.aws.com/zone
-              operator: In
-              values:
-                - ap-northeast-2a
   containers:
   - name: mongodb
     image: mongo
     volumeMounts:
-      - mountPath: /data/db
-        name: mongodb-data
+    - name: mongodb-data 
+      mountPath: /data/db
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
     ports:
-      - containerPort: 27017
+      - containerPort: 27017 
         protocol: TCP
-
   volumes:
-    - name: mongodb-data
-      persistentVolumeClaim:
-        claimName: mongodb-pvc
+  - name: mongodb-data 
+    persistentVolumeClaim: 
+      claimName: mongodb-pvc-dynamic

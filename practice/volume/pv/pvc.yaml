@@ -10,3 +10,31 @@ spec:
   accessModes:
     - ReadWriteOnce
   storageClassName: ""
+  
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-1
+spec:
+  capacity:
+    storage: 80Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  csi: 
+    driver: ebs.csi.aws.com
+    fsType: ext4
+    volumeHandle: vol-043bfbdf156c094af
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+          - key: topology.ebs.csi.aws.com/zone
+            operator: In
+            values:
+            - ap-northeast-2a
+
+
+
