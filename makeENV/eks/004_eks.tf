@@ -1,3 +1,5 @@
+# 쿠버네티스
+
 #########################################################################################################
 ## Create eks cluster
 #########################################################################################################
@@ -10,6 +12,7 @@ module "eks" {
   cluster_endpoint_public_access  = true
   cluster_endpoint_private_access = true
 
+  # EKS > 추가기능 서비스들 설치
   cluster_addons = {
     coredns = {
       most_recent = true
@@ -20,6 +23,9 @@ module "eks" {
     vpc-cni = {
       cluster_name = var.cluster-name
       most_recent = true
+    }
+    aws-ebs-csi-driver={
+      most_recent=true
     }
   }
 
@@ -34,7 +40,7 @@ module "eks" {
   eks_managed_node_groups = {
     green = {
       min_size     = 2
-      max_size     = 2
+      max_size     = 4
       desired_size = 2
 
       instance_types = ["m7i.large"]

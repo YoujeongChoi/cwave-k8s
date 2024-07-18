@@ -12,6 +12,7 @@ nodes:
   image: kindest/node:v1.29.4
   extraPortMappings:
   - containerPort: 80
+    # 내 컴퓨터 포트
     hostPort: 80
     protocol: TCP
   - containerPort: 443

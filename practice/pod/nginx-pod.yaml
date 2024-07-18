@@ -1,0 +1,22 @@
+# port-forward를 이용해서 로컬 8080 포트를 nginx 서비스 포트와 연결하세요
+# curl 명령어르 사용해서 nginx 서비스에 접속하세요
+# nginx Pod 의 정보를 yaml 파일로 출력 하세요
+# Nginx Pod의 Bash 에 접속해서 nginx 의 설정파일을 확인하세요
+# nginx-app Pod 를 삭제 하세요
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  labels:
+    name: nginx
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx:1.18.0
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    ports:
+      - containerPort: 80

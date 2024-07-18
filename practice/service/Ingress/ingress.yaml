@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-lb
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: external
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+spec:
+  type: LoadBalancer
+  selector:
+    app: nginx
+  ports:
+  - port: 80 
+    targetPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: goapp-lb
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: external
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+spec:
+  type: LoadBalancer
+  selector:
+    app: goapp
+  ports:
+  - port: 80
+    targetPort: 8080
+
+---
+apiVersion: networking.k8s.io/v1 
+kind: IngressClass
+metadata:
+  name: alb-ingress-class 
+spec: 
+  controller: ingress.k8s.aws/alb
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip 
+  labels:
+    name: ingress
+spec:
+  ingressClassName: "alb-ingress-class"
+  rules:
+  - host: nginx.duldul100.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: nginx-lb
+            port: 
+              number: 80
+  - host: goapp.duldul100.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: goapp-lb
+            port: 
+              number: 80
+
+

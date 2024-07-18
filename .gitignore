@@ -3,3 +3,9 @@ makeENV/eks/.terraform.lock
 makeENV/eks/.terraform.lock.hcl
 makeENV/IDE/.env
 makeENV/IDE/password.txt
+makeENV/IDE/certi.txt
+
+makeENV/eks/cwave.pem
+
+../config
+../.idea

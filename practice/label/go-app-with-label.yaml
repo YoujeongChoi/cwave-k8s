@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: goapp-pod
+  # namespace: my-ns
+  labels:
+    name: goapp
+    # 환경 - 운영
+    env: prod
+spec:
+  containers:
+  - name: goapp-container
+    image: dangtong/goapp
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    ports:
+      - containerPort: 8080

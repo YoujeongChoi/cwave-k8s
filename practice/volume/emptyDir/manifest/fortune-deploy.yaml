@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fortune-deploy
+spec:
+  selector:
+    matchLabels:
+      app: fortune
+  # pod 3개, 각 내부에 컨테이너 두개씩
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: fortune
+    spec:
+      # 두개의 컨테이너 (하나는 웹서버, 하나는 컨텐츠 생성기)
+      containers:
+      - name: html-generater
+        image: dangtong/fortunek8s
+        volumeMounts:
+          - mountPath: /var/htdocs
+            name: html
+        resources:
+          limits:
+            memory: "128Mi"
+            # cpu 1000m - vpc 1장
+            cpu: "200m"
+
+      - name: web-server
+        image: nginx:alpine
+        volumeMounts:
+            # nginx 루트 디렉토리 (nginx.conf 파일 건드리지 않는다면)
+          - mountPath: /usr/share/nginx/html
+            name: html
+            readOnly: true
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+        ports:
+        - containerPort: 80
+
+      volumes:
+        - name: html
+          emptyDir: {}

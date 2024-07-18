@@ -1,3 +1,5 @@
+# 테라폼이 쿠버네티스 설치할때 필요한 권한들
+
 resource "aws_iam_role" "ec2_role" {
     
   name = "cwave_ec2_role"

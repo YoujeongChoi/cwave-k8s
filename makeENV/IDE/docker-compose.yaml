@@ -9,6 +9,7 @@ services:
       - kind_network
     environment:
       FILE__PASSWORD: /run/secrets/code-server-password
+      PASSWORD: password
     env_file:
       - .env
     working_dir: /code
@@ -20,10 +21,13 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - local_code:/code/local
       - remote_code:/code/remote
-      - vscode:/config
+      - config:/config
+#    entrypoint: /bin/sh -c "rm -f /config/.kube/config.lock"
+
     # depends_on:
     #   server:
     #     condition: service_completed_successfully
+
   gitsync:
     profiles:
       - init
@@ -37,6 +41,7 @@ services:
       GITSYNC_ONE_TIME: 1
     volumes:
       - remote_code:/tmp
+
 networks:
   kind_network:
     name: kind
@@ -49,9 +54,9 @@ volumes:
   remote_code:
     external: true
     name: remote_code
-  vscode:
+  config:
     external: true
-    name: vscode
+    name: config
 
 secrets:
   code-server-password:

@@ -1,0 +1,49 @@
+# nginx:1.9.1 Pod 3개로 구성된 Replication Controller를 작성 하세요
+# Replication Controller 만 삭제 하세요 (Pod 는 유지)
+# 남겨진 nginx Pod를 관리하는 ReplicaSet 을 작성하된 replica 4개로 구성 하세요
+# nginx Pod 를 6개로 Scale Out 하세요
+
+# apiVersion: v1
+# kind: ReplicationController
+# metadata:
+#   name: myapp
+# spec:
+#   replicas: 3
+#   selector:
+#     app: myapp-target
+#   template:
+#     metadata:
+#       name: myapp-pod
+#       labels:
+#         app: myapp-target
+#     spec:
+#       containers:
+#         - name: myapp-container
+#           image: nginx:1.9.1
+#           ports:
+#             - containerPort: 80
+
+
+
+# 기존의 관리하던 pod를 selector, template 을 맞춰준다.
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: nginx
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      tier: myapp-target
+  template:
+    metadata:
+      labels:
+        tier: myapp-target
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx:1.9.1
+        ports:
+          - containerPort: 80
+
+        

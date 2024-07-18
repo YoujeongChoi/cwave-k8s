@@ -1,0 +1,32 @@
+# 아래 조건에 맞는 Deployment 를 생성 하세요
+# Deployemnt 의 image 를 httpd:2.4-appine 으로 변경하세요
+# 변경 사유를 Rollout History 에 남기세요
+# 전체 인스턴스 개수를 7개 까지 확장하세요
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: myapp
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      # 최소 인스턴스 2개, 최대 7개
+      maxSurge: 2
+      maxUnavailable: 3
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+      - name: myapp
+        image: httpd:2.3-alpine
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
